@@ -41,9 +41,13 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build
 
+      - name: Check if .app exists
+        run: |
+          echo "Listing files in build directory"
+          ls ios/App/build/Debug-iphonesimulator
+
       - name: Upload built .app as artifact
         uses: actions/upload-artifact@v3
         with:
           name: ios-app-build
-          path: |
-            ios/App/build/Debug-iphonesimulator/*.app
+          path: ios/App/build/Debug-iphonesimulator/*.app
