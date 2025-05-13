@@ -1,10 +1,7 @@
-name: Build iOS Debug
+name: iOS Build
 
 on:
-  push:
-    branches:
-      - main  # or your development branch
-  workflow_dispatch:
+  workflow_dispatch:  # allows manual trigger from GitHub UI
 
 jobs:
   build-ios:
@@ -14,29 +11,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies
+        run: npm install
+
+      - name: Install CocoaPods
         run: |
-          npm install
-          cd ios
+          sudo gem install cocoapods
+          cd ios/App
           pod install
 
-      - name: Build iOS App (Debug)
+      - name: Build iOS project (Debug)
         run: |
-          cd ios
-          xcodebuild \
-            -workspace App.xcworkspace \
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
             -scheme App \
-            -configuration Debug \
             -sdk iphonesimulator \
-            -derivedDataPath build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-debug-build
-          path: ios/build
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 14' \
+            build
