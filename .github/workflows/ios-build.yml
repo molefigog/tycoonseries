@@ -41,13 +41,16 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build
 
-      - name: Check if .app exists
-        run: |
-          echo "Listing files in build directory"
-          ls ios/App/build/Debug-iphonesimulator
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
 
       - name: Upload built .app as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ios-app-build
           path: ios/App/build/Debug-iphonesimulator/*.app
