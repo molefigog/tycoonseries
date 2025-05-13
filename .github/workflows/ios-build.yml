@@ -14,12 +14,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: Install dependencies
+      - name: Install npm dependencies
         run: npm install
 
-      - name: Generate native config
+      - name: Sync Capacitor iOS project
         run: npx cap sync ios
 
       - name: Install CocoaPods
@@ -40,3 +40,10 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             build
+
+      - name: Upload built .app as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-app-build
+          path: |
+            ios/App/build/Debug-iphonesimulator/*.app
