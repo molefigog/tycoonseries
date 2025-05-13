@@ -25,7 +25,7 @@ jobs:
           cd ios/App
           pod install
 
-      - name: Build iOS project (Debug)
+     - name: Build iOS project (Debug - No Code Signing)
         run: |
           cd ios/App
           xcodebuild -workspace App.xcworkspace \
@@ -33,4 +33,7 @@ jobs:
             -sdk iphonesimulator \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=iPhone 14' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
             build
